@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+  <meta charset="utf-8">
+
+  <title>menu</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="favicon.ico" rel="shortcut icon">
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="teacon-archive.css" rel="stylesheet">
+
+</head>
+<body>
+
+	<div class="container">
+    <div class="menu-content">
+      <h1>Menu</h1>
+
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <form class="form-horizontal">
+
+            <div class="form-group">
+              <label for="period-selector" class="col-xs-2">期</label>
+              <div class="col-xs-8">
+                <select id="period-selector">
+                  <option value="period1">1期</option>
+                  <option value="period2" selected>2期</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="week-selector" class="col-xs-2">週</label>
+              <div class="col-xs-8">
+                <select id="week-selector"></select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="eno" class="col-xs-2">ENo</label>
+              <div class="col-xs-8">
+                <input class="input-xmini" type="number" id="eno" min="1" value="">
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="form-group">
+              <div class="col-xs-10">
+                <button id="show-eno" class="btn btn-default" type="button">結果表示</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-xs-10">
+                <input type="checkbox" id="eno-another-window" value="true"><label for="eno-another-window">別窓</label>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="form-group">
+              <div class="col-xs-10">
+                <button id="show-report" class="btn btn-default" type="button">レポート表示</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-xs-10">
+                <input type="checkbox" id="report-another-window" value="true"><label for="report-another-window">別窓</label>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="lib/jquery-1.11.3.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="teacon-archive-menu.js"></script>
+</body>
+</html>

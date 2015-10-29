@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+<meta charset="utf-8">
+
+<title>てぃーこん レポート ({{ seq }})</title>
+<link rel="shortcut icon" href="favicon.ico" />
+
+<script src="../lib/jquery.min.js" type="text/javascript"></script>
+<script src="../lib/jquery.tabslet.min.js" type="text/javascript"></script>
+<script src="../lib/tablesorter/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" media="screen" href="../lib/tablesorter/themes/blue/style.css" />
+
+<style type="text/css">
+.item_red { color: #FF3333; }
+th, th { font-size: 80%; }
+</style>
+<script language="javascript" type="text/javascript">
+
+$(function(){
+  $('#player_list').tablesorter();
+})
+</script>
+<noscript>
+<p>JavaScriptを有効にしてね！</p>
+</noscript>
+
+</head>
+<body>
+
+<h1>てぃーこん レポート ({{ seq }})</h1>
+
+<table id="player_list" class="tablesorter">
+<thead>
+<tr>
+{% for header in headers %}
+<th>{{ header }}</th>
+{% endfor %}
+</tr>
+</thead>
+<tbody>
+{% for player in players %}
+     <tr>
+       <td><a href="http://teacon.kitunebi.com/RESULT/c{{ player.d04_eno }}.html">{{ player.eno }}</a></td>
+       {% for data in player.data %}
+       <td>{{ data }}</td>
+       {% endfor %}
+     </tr>
+{% endfor %}
+</tbody>
+</table>
+
+</body>
+</html>
