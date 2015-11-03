@@ -83,6 +83,11 @@ class Result:
         self.get_tp = 0
         self.get_cp = 0
         self.get_kp = 0
+        self.product_tp = 0
+        self.product_cp = 0
+        self.defeat_cp = 0
+        self.get_tp_sum = 0
+        self.get_cp_sum = 0
         self.sell = 0
         self.sell_exp = 0
         self.issue = ''
@@ -144,6 +149,41 @@ def analyze_result(input_dir, eno):
         if re.search(r'CP蓄積増加', element.string):
             result.interest_cp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
 
+        if re.search(r'TP収穫', element.string):
+            result.get_tp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+        if re.search(r'CP収穫', element.string):
+            result.get_cp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+        if re.search(r'TP生産', element.string):
+            result.product_tp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+        if re.search(r'CP生産', element.string):
+            result.product_cp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+        if re.search(r'撃破CP', element.string):
+            result.defeat_cp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+        if re.search(r'ユニット販売数', element.string):
+
+            if len(harvest_div.contents[index+1].contents) > 0:
+                contents = harvest_div.contents[index+1].contents[0]
+                match = re.match(r'(\d+)個', contents)
+                result.sell = int(match.group(1))
+
+        if re.search(r'合計TP入手', element.string):
+            result.get_tp_sum = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+        if re.search(r'合計CP入手', element.string):
+            result.get_cp_sum = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+        if re.search(r'KP変異', element.string):
+            result.get_kp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+        if re.search(r'販売経験', element.string):
+            result.sell_exp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+
+    #️ period1
     for index in range(len(harvest_p.contents)):
         element = harvest_p.contents[index]
 
@@ -228,8 +268,8 @@ def print_header():
 
     header = [
         'ENo', '名前', '愛称',
-        'TP蓄積増加', 'CP蓄積増加', 'TP収穫', 'CP収穫', 'KP変異',
-        'TP+CP収穫', '販売経験', '売上', '戦績',
+        'TP蓄積増加', 'CP蓄積増加', 'TP収穫', 'CP収穫', 'TP生産', 'CP生産', '撃破CP',
+        '合計TP入手', '合計CP入手', '合計TP+CP入手', 'KP変異', '販売経験', '売上', '戦績',
         '累積TP', '累積CP', '累積KP', 'TP', 'CP',
         '敵愾心', '虚栄心', '猜疑心', '利己心', '自尊心',
         'money', '経験値', '危険度深度',
@@ -250,8 +290,8 @@ def print_result(result):
 
     row = [
         player.eno, player.name, player.nickname,
-        result.interest_tp, result.interest_cp, result.get_tp, result.get_cp, result.get_kp,
-        result.get_tp + result.get_cp, result.sell_exp, result.sell, result.issue,
+        result.interest_tp, result.interest_cp, result.get_tp, result.get_cp, result.product_tp, result.product_cp, result.defeat_cp,
+        result.get_tp_sum, result.get_cp_sum, result.get_tp_sum + result.get_cp_sum, result.get_kp, result.sell_exp, result.sell, result.issue,
         player.acc_tp, player.acc_cp, player.acc_kp, player.tp, player.cp,
         player.hostility, player.vanity, player.suspicious, player.selfish, player.pride,
         player.money, player.exp, player.dangerous,
