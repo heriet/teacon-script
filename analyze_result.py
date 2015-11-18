@@ -71,6 +71,8 @@ class Fortress:
         self.df_shoot = 0
         self.df_magic = 0
 
+        self.low_story_cor = 0
+
         self.used_magic = 0
         self.status = ''
 
@@ -137,70 +139,74 @@ def analyze_result(input_dir, eno):
     harvest_div = soup.find('h2', {'id': 'nextday'}).find_next_sibling('div')
     harvest_p = harvest_div.find('p')
 
-    for index in range(len(harvest_div.contents)):
+    for index in range(len(harvest_div.contents) - 1):
         element = harvest_div.contents[index]
 
         if not element.string:
             continue
 
+        next_contents = harvest_div.contents[index+1].contents
+
         if re.search(r'TP蓄積増加', element.string):
-            result.interest_tp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.interest_tp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'CP蓄積増加', element.string):
-            result.interest_cp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.interest_cp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'TP収穫', element.string):
-            result.get_tp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.get_tp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'CP収穫', element.string):
-            result.get_cp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.get_cp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'TP生産', element.string):
-            result.product_tp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.product_tp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'CP生産', element.string):
-            result.product_cp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.product_cp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'撃破CP', element.string):
-            result.defeat_cp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.defeat_cp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'ユニット販売数', element.string):
 
-            if len(harvest_div.contents[index+1].contents) > 0:
-                contents = harvest_div.contents[index+1].contents[0]
+            if len(next_contents) > 0:
+                contents = next_contents[0]
                 match = re.match(r'(\d+)個', contents)
                 result.sell = int(match.group(1))
 
         if re.search(r'合計TP入手', element.string):
-            result.get_tp_sum = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.get_tp_sum = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'合計CP入手', element.string):
-            result.get_cp_sum = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.get_cp_sum = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'KP変異', element.string):
-            result.get_kp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.get_kp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'販売経験', element.string):
-            result.sell_exp = int(harvest_div.contents[index+1].contents[0]) if len(harvest_div.contents[index+1].contents) > 0 else 0
+            result.sell_exp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
     #️ period1
-    for index in range(len(harvest_p.contents)):
+    for index in range(len(harvest_p.contents) - 1):
         element = harvest_p.contents[index]
 
         if not element.string:
             continue
 
+        next_contents = harvest_p.contents[index+1].contents
+
         if re.search(r'TP収穫', element.string):
-            result.get_tp = int(harvest_p.contents[index+1].contents[0]) if len(harvest_p.contents[index+1].contents) > 0 else 0
+            result.get_tp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'CP収穫', element.string):
-            result.get_cp = int(harvest_p.contents[index+1].contents[0]) if len(harvest_p.contents[index+1].contents) > 0 else 0
+            result.get_cp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'KP変異', element.string):
-            result.get_kp = int(harvest_p.contents[index+1].contents[0]) if len(harvest_p.contents[index+1].contents) > 0 else 0
+            result.get_kp = int(next_contents[0]) if len(next_contents) > 0 else 0
 
         if re.search(r'販売経験', element.string):
-            text = harvest_p.contents[index+1].contents[0]
+            text = next_contents[0]
             match = re.match(r'(\d+)\s*\(売上(\d+)個\)', text)
             result.sell_exp = int(match.group(1))
             result.sell = int(match.group(2))
@@ -252,7 +258,16 @@ def analyze_result(input_dir, eno):
         fortress.df_magic = int(specdata.find('th', text='魔術防御').next_sibling.string)
 
         fortress.used_magic = int(re.match(r'(\d+)/\d+', specdata.find('th', text='魔力消費量').next_sibling.string).group(1))
-        fortress.status = specdata.find('th', text='城塞状況').next_sibling.string
+
+        status_children = specdata.find('th', text='城塞状況').next_sibling.contents
+
+        if len(status_children) == 1:
+            fortress.status = status_children[0]
+
+        elif len(status_children) > 2:
+            match = re.match(r'低階層補正（警戒\+(\d+)）', status_children[0])
+            fortress.low_story_cor = int(match.group(1))
+            fortress.status = status_children[2]
 
     lose_message = soup.find('i', text='%sの城は陥落した！！' % player.name)
     if lose_message:
@@ -273,7 +288,7 @@ def print_header():
         '累積TP', '累積CP', '累積KP', 'TP', 'CP',
         '敵愾心', '虚栄心', '猜疑心', '利己心', '自尊心',
         'money', '経験値', '危険度深度',
-        '壮大値', '階層数', '警戒値',
+        '壮大値', '階層数', '低階層補正', '警戒値',
         '遅延強化', '加速強化', '誘発強化',
         '遅延防御', '加速防御', '誘発防御',
         '格闘防御', '射撃防御', '魔術防御',
@@ -295,7 +310,7 @@ def print_result(result):
         player.acc_tp, player.acc_cp, player.acc_kp, player.tp, player.cp,
         player.hostility, player.vanity, player.suspicious, player.selfish, player.pride,
         player.money, player.exp, player.dangerous,
-        fortress.magnificent, fortress.story, fortress.caution,
+        fortress.magnificent, fortress.story, fortress.low_story_cor, fortress.caution,
         fortress.at_delay, fortress.at_accel, fortress.at_lead,
         fortress.df_delay, fortress.df_accel, fortress.df_lead,
         fortress.df_fight, fortress.df_shoot, fortress.df_magic,
