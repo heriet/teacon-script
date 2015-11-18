@@ -18,7 +18,7 @@ python3 analyze_result.py web/archive/period2/XXX/RESULT > tsv/period2/XXX.tsv
 ### Report html
 
 ```sh
-python3 render_report.py XXX tsv/period2/XXX.tsv web/report/period2/XXX.html
+python3 render_report.py 2 XXX tsv/period2/XXX.tsv web/report/period2/XXX.html
 ```
 
 ## License

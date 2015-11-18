@@ -9,4 +9,4 @@ PERIOD=$1
 WEEK=$2
 
 python3 analyze_result.py web/archive/period${PERIOD}/${WEEK}/RESULT > tsv/period${PERIOD}/${WEEK}.tsv
-python3 render_report.py ${WEEK} tsv/period${PERIOD}/${WEEK}.tsv web/report/period${PERIOD}/${WEEK}.html
+python3 render_report.py ${PERIOD} ${WEEK} tsv/period${PERIOD}/${WEEK}.tsv web/report/period${PERIOD}/${WEEK}.html

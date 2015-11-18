@@ -266,8 +266,12 @@ def analyze_result(input_dir, eno):
 
         elif len(status_children) > 2:
             match = re.match(r'低階層補正（警戒\+(\d+)）', status_children[0])
-            fortress.low_story_cor = int(match.group(1))
-            fortress.status = status_children[2]
+
+            if match:
+                fortress.low_story_cor = int(match.group(1))
+                fortress.status = status_children[2]
+            else:
+                fortress.status = status_children[0]
 
     lose_message = soup.find('i', text='%sの城は陥落した！！' % player.name)
     if lose_message:

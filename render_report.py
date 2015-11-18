@@ -5,10 +5,10 @@
 Teacon Result Report Script
 
 usage:
-    python3 analyze_result.py <seq> <input> <output>
+    python3 analyze_result.py <period> <seq> <input> <output>
 
 example:
-    python3 render_report.py 001 tsv/period2/001.tsv web/report/period2/001.html
+    python3 render_report.py 2 001 tsv/period2/001.tsv web/report/period2/001.html
 
 """
 
@@ -25,11 +25,13 @@ sys.stderr = open(sys.stderr.fileno(), 'w', encoding='utf-8')
 def main():
 
     parser = argparse.ArgumentParser(description='Parser for Teacon')
+    parser.add_argument('period', help='period (period of teacon)')
     parser.add_argument('seq', help='seq (week of teacon)')
     parser.add_argument('input', help='path of tsv')
     parser.add_argument('output', help='path of html')
     args = parser.parse_args()
 
+    period = args.period
     seq = args.seq
     input_file = args.input
     output_file = args.output
@@ -51,7 +53,7 @@ def main():
 
     template = Template(open('template/report.html', 'r', encoding='utf-8').read())
 
-    template.stream(seq=seq, headers=headers, players=players).dump(output_file)
+    template.stream(period=period, seq=seq, headers=headers, players=players).dump(output_file)
 
 
 if __name__ == '__main__':
